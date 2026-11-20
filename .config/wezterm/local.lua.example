@@ -1,0 +1,11 @@
+-- Copy to local.lua to keep host-specific settings out of git.
+return {
+  ssh_domains = {
+    {
+      name = 'ec2',
+      remote_address = '203.0.113.10',
+      username = 'ubuntu',
+      multiplexing = 'WezTerm',
+    },
+  },
+}

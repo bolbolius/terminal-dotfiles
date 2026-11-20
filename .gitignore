@@ -1,0 +1,2 @@
+# host-specific settings: ssh hosts, paths
+local.lua

@@ -1,6 +1,6 @@
 # terminal-dotfiles
 
-This is my personal shell setup focused on speed, minimalism, and a cohesive Tokyo Night palette.
+This is my personal terminal setup focused on speed, minimalism, and a cohesive Tokyo Night palette.
 
 <!-- ![Preview](preview.png) -->
 
@@ -18,6 +18,7 @@ This is my personal shell setup focused on speed, minimalism, and a cohesive Tok
 
 | Tool          | Config                           | Description                                                                                                               |
 | ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **WezTerm**   | `.config/wezterm/wezterm.lua`    | Tokyo Night palette, pill tabs on the retro tab bar, 4-line wheel scrolling, low-power WebGPU                             |
 | **Zsh**       | `.zshrc`                         | Zinit, deferred plugin loading, fzf-tab, autosuggestions, syntax highlighting, history search, zoxide, and useful aliases |
 | **Starship**  | `.config/starship.toml`          | 2-line prompt, Tokyo Night capsules, Git integration, and command status                                                  |
 | **Fastfetch** | `.config/fastfetch/config.jsonc` | Minimal tree-style system info with colored glyphs                                                                        |
@@ -26,6 +27,7 @@ This is my personal shell setup focused on speed, minimalism, and a cohesive Tok
 
 ### Prerequisites
 
+* `wezterm`
 * `zsh`
 * `starship`
 * `fastfetch`
