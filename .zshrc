@@ -110,4 +110,24 @@ alias code-oss='code'
 
 # --- Banner & Prompt ---
 (( $+commands[fastfetch] )) && [[ -o interactive ]] && fastfetch
-eval "$(starship init zsh)"
+if (( $+commands[starship] )); then
+  _starship_init="${XDG_CACHE_HOME:-$HOME/.cache}/starship/init.zsh"
+  if [[ ! -s $_starship_init || $commands[starship] -nt $_starship_init ]]; then
+    mkdir -p "${_starship_init:h}"
+    if starship init zsh >| "$_starship_init.tmp" 2>/dev/null &&
+       [[ -s "$_starship_init.tmp" ]]; then
+      mv -f "$_starship_init.tmp" "$_starship_init"
+    fi
+  fi
+  if [[ -s $_starship_init ]]; then
+    source "$_starship_init"
+  else
+    eval "$(starship init zsh)"
+  fi
+  unset _starship_init
+  # starship drives RPROMPT with a second process; the clock comes from $fill
+  RPROMPT=''
+fi
+
+starship-full() { export STARSHIP_CONFIG="$HOME/.config/starship-full.toml"; }
+starship-lite() { export STARSHIP_CONFIG="$HOME/.config/starship.toml"; }

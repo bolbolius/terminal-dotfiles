@@ -1,30 +1,24 @@
 # Starship Configuration
 # Aesthetic: Modern Sleek Pill / Subtle Capsule Layout with Tokyo Night Palette
 
-command_timeout = 750
+command_timeout = 400
+scan_timeout = 20
 add_newline = true
-
-# Left prompt: OS badge, directory pill, git badge, background jobs, execution duration, failure status
-format = """
-$os\
-$directory\
-$git_branch\
-$git_status\
-$jobs\
-$cmd_duration\
-$status\
-$line_break\
-$character"""
-
-# Right prompt: Clean pill with clock
-right_format = """$time"""
-
-# --- Custom Tokyo Night Palette ---
 palette = "tokyo_night"
 
+format = """
+$os$container$env_var$directory$git_branch$git_state$git_status\
+$golang$python$nodejs$terraform$kubernetes$docker_context$jobs\
+$fill$hostname$username$time\
+$line_break\
+$cmd_duration$status$character"""
+
+[fill]
+symbol = " "
+
+# --- Palette ---
 [palettes.tokyo_night]
 surface = "#24283b"
-surface_bright = "#292e42"
 fg = "#c0caf5"
 muted = "#565f89"
 blue = "#7aa2f7"
@@ -34,14 +28,17 @@ magenta = "#bb9af7"
 red = "#f7768e"
 yellow = "#e0af68"
 orange = "#ff9e64"
+purple = "#9d7cd8"
+teal = "#73daca"
 
-# --- Line 2: Character Prompt ---
+
+# --- Prompt ---
 [character]
 success_symbol = "[󱞪](bold cyan) "
 error_symbol = "[󱞪](bold red) "
 vimcmd_symbol = "[󰌌](bold green) "
 
-# --- OS Badge (Void Green) ---
+# --- OS ---
 [os]
 disabled = false
 style = "bold green"
@@ -55,8 +52,20 @@ Arch = "󰣇 "
 Debian = "󰣚 "
 Fedora = "󰣛 "
 Macos = "󰀵 "
+Windows = "󰍲 "
 
-# --- Directory (Modern capsule) ---
+# --- Container ---
+[container]
+style = "bold purple"
+symbol = "󰏖 "
+format = "[$symbol]($style) "
+
+# --- Env ---
+[env_var]
+variable = "AWS_PROFILE"
+format = "[](surface)[󰘊 $env_value](bold orange bg:surface)[](surface) "
+
+# --- Directory ---
 [directory]
 style = "bold blue"
 format = "[](surface)[󰉋 ](bold cyan bg:surface)[$path](bold fg bg:surface)[](surface) "
@@ -65,65 +74,97 @@ truncation_symbol = "…/"
 read_only = " 󰌾"
 read_only_style = "bold red bg:surface"
 home_symbol = "~"
+use_os_path_sep = true
 
 # --- Git ---
 [git_branch]
 symbol = " "
 style = "bold magenta"
 format = "[](surface)[$symbol$branch](bold magenta bg:surface)[](surface) "
-
+truncation_length = 28
+truncation_symbol = "…"
+[git_state]
+style = "bold orange"
+format = "[](surface)[$state( $progress_current/$progress_total)](bold orange bg:surface)[](surface) "
 [git_status]
 disabled = true
-format = '([ $all_status$ahead_behind]($style))[](surface) '
-conflicted = "󰞇 "
-ahead = "⇡${count} "
-behind = "⇣${count} "
-diverged = "⇕⇡${ahead_count}⇣${behind_count} "
-untracked = " "
-stashed = "󰏖 "
-modified = "󱗜 "
-staged = "󰐖 "
-renamed = "» "
-deleted = "✘ "
 
-# --- Command Duration ---
-[cmd_duration]
-min_time = 2_000
-show_milliseconds = false
-format = "[](surface)[󱎫 $duration](bold yellow bg:surface)[](surface) "
-
-# --- Background Jobs ---
+# --- Jobs ---
 [jobs]
 symbol = "✦ "
 style = "bold orange bg:surface"
-format = "[](surface)[$symbol$number]($style)[](surface) "
+format = "[](surface)[$symbol$number](bold orange bg:surface)[](surface) "
 
-# --- Exit Status (Only appears on failure) ---
+# --- Duration ---
+[cmd_duration]
+min_time = 2000
+show_milliseconds = false
+format = "[](surface)[󱎫 $duration](bold yellow bg:surface)[](surface) "
+
+# --- Status ---
 [status]
 disabled = false
 format = "[](surface)[✘ $status](bold red bg:surface)[](surface) "
-symbol = "✘"
 
-# --- Time (Right Prompt Capsule) ---
+# --- Right prompt ---
+[hostname]
+ssh_only = true
+trim_at = "."
+style = "bold teal"
+format = "[](surface)[󰘶 $hostname](bold teal bg:surface)[](surface) "
+[username]
+show_always = false
+style_user = "bold yellow"
+style_root = "bold red"
+format = "[](surface)[$user](bold yellow bg:surface)[](surface) "
 [time]
 disabled = false
 time_format = "%R"
 format = "[](surface)[󱑎 $time](bold muted bg:surface)[](surface)"
 
-# --- Disable unused language noise ---
+# --- Toolchains ---
+[golang]
+symbol = " "
+detect_files = ["go.mod", "go.sum", "go.work"]
+format = "[](surface)[ $version](bold cyan bg:surface)[](surface) "
+[python]
+symbol = " "
+detect_files = ["pyproject.toml", "requirements.txt", "setup.py", ".python-version", "Pipfile"]
+format = "[](surface)[ $version( $virtualenv)](bold yellow bg:surface)[](surface) "
+[nodejs]
+symbol = "󰎙 "
+detect_files = ["package.json", ".nvmrc", "pnpm-lock.yaml", "yarn.lock", "bun.lockb"]
+format = "[](surface)[󰎙 $version](bold green bg:surface)[](surface) "
+[terraform]
+style = "bold purple"
+format = "[](surface)[󱁢 $workspace](bold purple bg:surface)[](surface) "
+[kubernetes]
+style = "bold blue"
+format = "[](surface)[$context](bold blue bg:surface)[](surface) "
+
+# --- Docker ---
+[docker_context]
+only_with_files = true
+detect_files = ["docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml", "Dockerfile"]
+style = "bold blue"
+format = "[](surface)[ $context](bold blue bg:surface)[](surface) "
+
+# --- Disabled ---
 [aws]
 disabled = true
 [gcloud]
 disabled = true
 [package]
 disabled = true
-[nodejs]
-disabled = true
-[python]
-disabled = true
 [rust]
 disabled = true
-[golang]
+[cmake]
+disabled = true
+[c]
+disabled = true
+[helm]
+disabled = true
+[pulumi]
 disabled = true
 [lua]
 disabled = true
@@ -131,5 +172,37 @@ disabled = true
 disabled = true
 [ruby]
 disabled = true
-[docker_context]
+[java]
+disabled = true
+[deno]
+disabled = true
+[bun]
+disabled = true
+[dotnet]
+disabled = true
+[elixir]
+disabled = true
+[erlang]
+disabled = true
+[haskell]
+disabled = true
+[julia]
+disabled = true
+[kotlin]
+disabled = true
+[swift]
+disabled = true
+[zig]
+disabled = true
+[perl]
+disabled = true
+[shell]
+disabled = true
+[vagrant]
+disabled = true
+[spack]
+disabled = true
+[memory_usage]
+disabled = true
+[battery]
 disabled = true
