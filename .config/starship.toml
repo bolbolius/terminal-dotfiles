@@ -9,9 +9,9 @@ palette = "tokyo_night"
 format = """
 $os$container$env_var$directory$git_branch$git_state$git_status\
 $golang$python$nodejs$terraform$kubernetes$docker_context$jobs\
-$fill$hostname$username$time\
+$cmd_duration$status$fill$hostname$username$time\
 $line_break\
-$cmd_duration$status$character"""
+$character"""
 
 [fill]
 symbol = " "
